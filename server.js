@@ -30,7 +30,10 @@ app.use(stylus.middleware(
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 
-mongoose.connect('mongodb://localhost/nerd-net');
+if(env === 'development')
+    mongoose.connect('mongodb://localhost/nerd-net');
+else
+    mongoose.connect('mongodb://elroy:nerds@ds045107.mongolab.com:45107/nerd-net');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error....'));
 db.once('open', function callback() {
@@ -57,7 +60,7 @@ app.get('*', function(req,res){
 });
 
 
-var port = 3000;
+var port = process.env.Port || 3000;
 app.listen(port);
 
 console.log('Listening on port '+ port + '...');
